@@ -1,7 +1,7 @@
 import './App.css';
 import { Link, Routes, Route } from 'react-router-dom';
-// import Inscription from './components/Inscription';
-// import Connexion from './components/Connexion';
+// import Inscription from './Components/Inscription';
+// import Connexion from './Components/Connexion';
 import Home from './Components/Home';
 
 function App() {
