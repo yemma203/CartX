@@ -18,3 +18,23 @@ const pool = mariadb.createPool({
 
 app.use(cors());
 app.use(express.json());
+
+// METHODS FOR CARDS
+
+// GET
+
+app.get('/cards', async (req, res) => {
+    try {
+        const conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM cards");
+        res.status(200).json(rows);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+
+
+app.listen(8000, () => {
+    console.log('Server is running on Port: 8000');
+});
