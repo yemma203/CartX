@@ -118,7 +118,6 @@ app.post('/cards', async (req, res) => {
 app.post('/manualCards', async (req, res) => {
     const newCard = req.body;
     let conn;
-
     try{
         conn = await pool.getConnection();
         const result = await conn.query('INSERT INTO cards (name, rarity, description, type, global_price) VALUES (?, ?, ?, ?, ?)', [

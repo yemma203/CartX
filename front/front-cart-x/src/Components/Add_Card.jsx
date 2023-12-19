@@ -102,9 +102,8 @@ export default function Add_Card() {
     };
 
     // Ajoutez la carte manuellement à la base de données
-    // (Vous devez implémenter cette fonction selon votre structure de base de données et les données nécessaires)
     try {
-      const response = await fetch("http://localhost:8000/cards", {
+      const response = await fetch("http://localhost:8000/manualCards", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,7 +112,6 @@ export default function Add_Card() {
       });
 
       if (response.ok) {
-        console.log("Carte ajoutée manuellement avec succès");
         setCardName("");
         setManualCardType("");
         setManualCardRarity("");
