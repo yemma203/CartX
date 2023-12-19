@@ -78,7 +78,6 @@ app.get('/users/:name', async(req, res) => {
         console.log('Erreur');
     }
 });
-
 // POST
 
 app.post('/users', async (req, res) => {
