@@ -6,8 +6,12 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+<<<<<<< HEAD
     "axios": "^1.6.2",
     "fetch": "^1.1.0",
+=======
+    "bcrypt": "^5.1.1",
+>>>>>>> c84152f996c945fab3e0e5f1530cf43e87875a4c
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.0",
