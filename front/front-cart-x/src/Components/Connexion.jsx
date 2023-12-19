@@ -1,64 +1,65 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import React from 'react'
+import { useState } from 'react'
 
-const Connexion = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const history = useHistory();
+export default function Connexion() {
+    // Fonction qui permet de se connecter
+    const [username, setUsername] = useState('');
+    const [mot_de_passe, setMot_de_passe] = useState('');
+    const [users, setUsers] = useState([]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleLogin = async (e) => {
+        e.preventDefault();
 
-    try {
-      // Faire la requête POST pour vérifier la connexion
-      const response = await axios.post('/connexion.php', {
-        action:'connexion',
-        username,
-        password,
-      });
+        const user = {
+            username: username,
+            mot_de_passe: mot_de_passe,
+        };
+        try{
+            const response = await fetch('http://localhost:8000/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+            if(response.ok){
+                console.log('Utilisateur connecté avec succès');
+                setUsername('');
+                setMot_de_passe('');
+                // On ajoute l'utilisateur dans le localStorage pour le connecter
+                localStorage.setItem('username', username);
+                window.location.href = '/home';
+            }
+            else{
+                console.log('Erreur lors de la connexion');
+            }
+        }
+        catch(err){
+            console.error(err.message);
+        }
+    };
+    return (
+        <div className='connexionContainer'>
+            <h1>Connexion</h1>
+            <form onSubmit={handleLogin}>
+                <label htmlFor="username">Nom d'utilisateur</label>
+                <input
+                    type="text"
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                />
 
-      // Logique de traitement de la réponse si nécessaire
-      console.log(response.data);
+                <label htmlFor="mot_de_passe">Mot de passe</label>
+                <input
+                    type="password"
+                    id="mot_de_passe"
+                    value={mot_de_passe}
+                    onChange={(e) => setMot_de_passe(e.target.value)}
+                />
 
-      // Si la connexion est réussie, rediriger vers la page des cartes
-      if (response.data.success) {
-        history.push('/cartes'); // Remplacez '/cartes' par le chemin de votre page des cartes
-      } else {
-        console.error('Échec de la connexion');
-      }
-
-      // Réinitialiser le formulaire
-      setUsername('');
-      setPassword('');
-    } catch (error) {
-      console.error('Erreur lors de la connexion :', error);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Nom d'utilisateur:
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Mot de passe:
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
-      <br />
-      <button type="submit">Se connecter</button>
-    </form>
-  );
-};
-
-export default Connexion;
+                <button type="submit">Se connecter</button>
+            </form>
+        </div>
+    )
+}

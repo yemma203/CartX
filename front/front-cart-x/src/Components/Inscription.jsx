@@ -1,71 +1,92 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom'; // Importer useHistory
+import React from 'react'
+import { useState } from 'react'
 
-const Inscription = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('');
-  const history = useHistory(); // Utiliser useHistory pour obtenir l'objet history
+export default function Inscription() {
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [mot_de_passe, setMot_de_passe] = useState('')
+    const [type_utilisateur, setType_utilisateur] = useState('')
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    try {
-      // Faire la requête POST pour ajouter l'utilisateur
-      const response = await axios.post('/utilisateur.php', {
-        action: 'inscription',
-        username,
-        password,
-        type_user: userType,
-      });
+    const handleAddUser = async (e) => {
+        e.preventDefault();
 
-      // Logique de traitement de la réponse si nécessaire
-      console.log(response.data);
+        const newUser = {
+          username: username,
+          email: email,
+          mot_de_passe: mot_de_passe,
+          type_utilisateur: type_utilisateur,
+        };
+      
+        try {
+            // Ajouter l'utilisateur dans la base de données
+            const response = await fetch("http://localhost:8000/users", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newUser),
+            });
+      
+            if (response.ok) {
+              console.log("Utilisateur ajouté avec succès");
+              setUsername("");
+              setEmail("");
+              setMot_de_passe("");
+              setType_utilisateur("");
+            // On ajoute l'utilisateur dans le localStorage pour le connecter
+              localStorage.setItem("username", username);
+              window.location.href = "/home";
+            } else {
+              console.log("Erreur lors de l'ajout de l'utilisateur");
+            }
+          }
+        catch (err) {
+          console.error(err.message);
+        }
+      };
 
-      // Réinitialiser le formulaire
-      setUsername('');
-      setPassword('');
-      setUserType('');
+    return (
+      <div>
+        <h1>Inscription</h1>
+        <form onSubmit={handleAddUser}>
+          <label htmlFor="username">Nom d'utilisateur</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
 
-      // Rediriger vers la page de connexion
-      history.push('/connexion'); // Utiliser history.push pour la redirection
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout de l\'utilisateur :', error);
-    }
-  };
+          <label htmlFor="email">Email</label>
+          <input
+            type="text"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Nom d'utilisateur:
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Mot de passe:
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Type d'utilisateur:
-        <select value={userType} onChange={(e) => setUserType(e.target.value)}>
-          <option value="joueur">Joueur</option>
-          <option value="createur">Créateur</option>
-        </select>
-      </label>
-      <br />
-      <button type="submit">Ajouter l'utilisateur</button>
-    </form>
-  );
-};
+          <label htmlFor="mot_de_passe">Mot de passe</label>
+          <input
+            type="text"
+            id="mot_de_passe"
+            value={mot_de_passe}
+            onChange={(e) => setMot_de_passe(e.target.value)}
+          />
 
-export default Inscription;
+          <label htmlFor="type_utilisateur">Type d'utilisateur</label>
+          {/* formulaire qui permet de choisir entre joueur et createur */}
+          <select
+            id="type_utilisateur"
+            value={type_utilisateur}
+            onChange={(e) => setType_utilisateur(e.target.value)}
+          >
+            <option value="joueur">Joueur</option>
+            <option value="createur">Créateur</option>
+          </select>
+
+          <button type="submit">S'inscrire</button>
+        </form>
+      </div>
+    );
+}
