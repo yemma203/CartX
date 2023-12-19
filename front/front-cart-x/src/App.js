@@ -3,6 +3,7 @@ import { Link, Routes, Route } from 'react-router-dom';
 import Inscription from './Components/Inscription';
 import Connexion from './Components/Connexion';
 import Home from './Components/Home';
+import Add_Card from './Components/Add_Card';
 
 function App() {
   return (
@@ -30,12 +31,16 @@ function App() {
             <Link to="/inscription">Inscription</Link>
           </div>
         )}
+        <div className='addCart'>
+          <Link to="/addCard">Ajouter Carte</Link>
+        </div>
       </nav>
 
       <Routes>
         <Route path="/inscription" element={<Inscription />} />
         <Route path="/login" element={<Connexion />} />
         <Route path="/" element={<Home />} />
+        <Route path="/addCard" element={<Add_Card />} />
       </Routes>
     </>
   );
