@@ -4,6 +4,11 @@ export default function Add_Card() {
   const [cardName, setCardName] = useState("");
   const [cards, setCards] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [manualCardType, setManualCardType] = useState("");
+  const [manualCardRarity, setManualCardRarity] = useState("");
+  const [manualCardDescription, setManualCardDescription] = useState("");
+  const [manualCardPrice, setManualCardPrice] = useState("");
+  const [showManualForm, setShowManualForm] = useState(false);
 
   useEffect(() => {
     // Utilisez une fonction asynchrone dans useEffect pour récupérer les cartes
@@ -67,6 +72,7 @@ export default function Add_Card() {
             console.log("Carte ajoutée avec succès");
             setCardName("");
             setErrorMessage("");
+            setShowManualForm(false); // Réinitialisez le formulaire manuel
           } else {
             console.log("Erreur lors de l'ajout de la carte");
           }
@@ -77,7 +83,49 @@ export default function Add_Card() {
         setErrorMessage("La carte est déjà présente dans la base de données");
       }
     } else {
-      setErrorMessage("Carte inexistante");
+      // Si la carte n'existe pas dans l'API, affichez un formulaire pour ajouter la carte manuellement
+      setErrorMessage(""); // Effacez le message d'erreur précédent
+      setShowManualForm(true); // Affichez le formulaire manuel
+    }
+  };
+
+  const handleManualAdd = async (e) => {
+    e.preventDefault();
+
+    // Récupérez les données nécessaires depuis le formulaire manuel
+    const newManualCard = {
+      name: cardName,
+      type: manualCardType,
+      rarity: manualCardRarity,
+      description: manualCardDescription,
+      global_price: manualCardPrice,
+    };
+
+    // Ajoutez la carte manuellement à la base de données
+    // (Vous devez implémenter cette fonction selon votre structure de base de données et les données nécessaires)
+    try {
+      const response = await fetch("http://localhost:8000/cards", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newManualCard),
+      });
+
+      if (response.ok) {
+        console.log("Carte ajoutée manuellement avec succès");
+        setCardName("");
+        setManualCardType("");
+        setManualCardRarity("");
+        setManualCardDescription("");
+        setManualCardPrice("");
+        setErrorMessage("");
+        setShowManualForm(false); // Réinitialisez le formulaire manuel
+      } else {
+        console.log("Erreur lors de l'ajout manuel de la carte");
+      }
+    } catch (err) {
+      console.error(err.message);
     }
   };
 
@@ -95,6 +143,48 @@ export default function Add_Card() {
         <button type="submit">Ajouter</button>
       </form>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+      {showManualForm && (
+        <div>
+          <p>La carte n'existe pas dans l'API.</p>
+          <p>Ajoutez manuellement la carte :</p>
+          {/* Formulaire pour ajouter manuellement la carte */}
+          <form onSubmit={handleManualAdd}>
+            <label htmlFor="manualCardType">Type</label>
+            <input
+              type="text"
+              id="manualCardType"
+              value={manualCardType}
+              onChange={(e) => setManualCardType(e.target.value)}
+            />
+
+            <label htmlFor="manualCardRarity">Rareté</label>
+            <input
+              type="text"
+              id="manualCardRarity"
+              value={manualCardRarity}
+              onChange={(e) => setManualCardRarity(e.target.value)}
+            />
+
+            <label htmlFor="manualCardDescription">Description</label>
+            <input
+              type="text"
+              id="manualCardDescription"
+              value={manualCardDescription}
+              onChange={(e) => setManualCardDescription(e.target.value)}
+            />
+
+            <label htmlFor="manualCardPrice">Prix général</label>
+            <input
+              type="text"
+              id="manualCardPrice"
+              value={manualCardPrice}
+              onChange={(e) => setManualCardPrice(e.target.value)}
+            />
+
+            <button type="submit">Ajouter manuellement</button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
