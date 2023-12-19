@@ -4,8 +4,8 @@ export default function Home() {
   const [cards, setCards] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(8);
-  const [sortParam, setSortParam] = useState(''); // Default sort by name
-
+  const [sortParam, setSortParam] = useState(''); 
+  const userType = localStorage.getItem('userType');
   const getCards = async () => {
     try {
       const response = await fetch(`http://localhost:8000/cards?sort=${sortParam}`);
@@ -55,6 +55,14 @@ export default function Home() {
           </div>
         ))}
       </div>
+      {userType === 'admin' && (
+        <div>
+          {/* Afficher le bouton d'administration */}
+          <button onClick={() => window.location.href = 'http://localhost/Projet_QUIZZEO/QUIZZEO/page%20authentification/'}>
+            Administration
+          </button>
+        </div>
+      )}
       <div className="pagination">
         <button
           onClick={() => {

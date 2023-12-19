@@ -169,12 +169,36 @@ app.get('/users/:name', async(req, res) => {
         conn = await pool.getConnection();
         const rows = await conn.query('SELECT * FROM users WHERE name = ?', [req.params.name]);
         console.log(rows);
+        const userType = rows[0].type_user;
         res.status(200).json(rows);
     }
     catch{
         console.log('Erreur');
     }
 });
+// Dans votre fichier index.js (ou où vous définissez vos routes)
+app.get('/users/type/:name', async (req, res) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const rows = await conn.query('SELECT type_user FROM users WHERE name = ?', [req.params.name]);
+
+        if (rows.length === 0) {
+            res.status(404).json({ message: 'Utilisateur non trouvé' });
+        } else {
+            const userType = rows[0].type_user;
+            res.status(200).json({ userType });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Erreur serveur' });
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+});
+
 
 // POST
 

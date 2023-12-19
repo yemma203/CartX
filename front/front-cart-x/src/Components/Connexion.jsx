@@ -5,8 +5,7 @@ export default function Connexion() {
     // Fonction qui permet de se connecter
     const [username, setUsername] = useState('');
     const [mot_de_passe, setMot_de_passe] = useState('');
-    const [users, setUsers] = useState([]);
-
+    const [Usertype, setUserType] = useState([]);
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -23,11 +22,20 @@ export default function Connexion() {
                 body: JSON.stringify(user),
             });
             if(response.ok){
+                try{
+
+                }catch(err){
+                    console.log(err.message);
+                }
+                const userTypeResponse = await fetch(`http://localhost:8000/users/type/${username}`);
+                const userTypeData = await userTypeResponse.json();    
                 console.log('Utilisateur connecté avec succès');
                 setUsername('');
                 setMot_de_passe('');
                 // On ajoute l'utilisateur dans le localStorage pour le connecter
+                setUserType(userTypeData.userType);
                 localStorage.setItem('username', username);
+                localStorage.setItem('userType', userTypeData.userType);
                 window.location.href = '/home';
             }
             else{
