@@ -58,6 +58,28 @@ app.post('/cards', async (req, res) => {
     }
 });
 
+app.post('/manualCards', async (req, res) => {
+    const newCard = req.body;
+    let conn;
+
+    try{
+        conn = await pool.getConnection();
+        const result = await conn.query('INSERT INTO cards (name, rarity, description, type, global_price) VALUES (?, ?, ?, ?, ?)', [
+            newCard.name, 
+            newCard.rarity,
+            newCard.description,
+            newCard.type,
+            newCard.global_price
+        ]);
+        console.log(result);
+        res.status(201).json({ newCard });
+    }
+    catch{
+        console.log('Erreur');
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
 
 // 
 // 
