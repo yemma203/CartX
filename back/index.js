@@ -96,47 +96,6 @@ app.get('/cards', async (req, res) => {
     }
 });
 
-// Methode pour récuperer l'id de la derniere carte ajoutée
-
-app.get('/cards/last', async (req, res) => {
-    let conn;
-    try {
-        conn = await pool.getConnection();
-        const rows = await conn.query('SELECT card_id FROM cards ORDER BY card_id DESC LIMIT 1');
-        res.status(200).json(rows);
-    } catch (err) {
-        console.error("Erreur côté serveur:", err.message);
-        res.status(500).json({ error: 'Erreur côté serveur' });
-    } finally {
-        if (conn) {
-            conn.release();
-        }
-    }
-});
-
-// Methode pour savoir si une carte est dans la collection d'un utilisateur
-
-app.get('/cards/:id/:user_id', async (req, res) => {
-    let conn;
-    try {
-        conn = await pool.getConnection();
-        const rows = await conn.query('SELECT * FROM user_cards WHERE card_id = ? AND user_id = ?', [req.params.id, req.params.user_id]);
-        if (rows.length === 0) {
-            res.status(404).json({ message: 'Carte non trouvée' });
-        } else {
-            res.status(200).json({ message: 'Carte trouvée' });
-        }
-    } catch (err) {
-        console.error("Erreur côté serveur:", err.message);
-        res.status(500).json({ error: 'Erreur côté serveur' });
-    } finally {
-        if (conn) {
-            conn.release();
-        }
-    }
-});
-
-
 // POST
 
 app.post('/cards', async (req, res) => {

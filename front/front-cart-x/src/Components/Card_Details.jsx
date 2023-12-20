@@ -157,8 +157,16 @@ const Card_Details = ({ card, onClose }) => {
                   <li>Prix Amazon : Inconnu</li>
                 )}
               </ul>
-              <button onClick={() => setIsEditing(true)}>Modifier</button>
-                <button onClick={handleDelete}>Supprimer</button>
+              {/* On verifie si l'utilisateur est admin ou si c'est lui qui a créer la carte */}
+                {localStorage.getItem("userType") === "admin" ||
+                localStorage.getItem("userId") == card.user_id ? (
+                    <div>
+                        <button onClick={() => setIsEditing(true)}>Modifier</button>
+                        <button onClick={handleDelete}>Supprimer</button>    
+                    </div>
+                ) : (
+                  <div></div>
+                )}
             </div>
           </div>
         )}
