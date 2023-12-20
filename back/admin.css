@@ -1,0 +1,105 @@
+/* Ajoutez ce code CSS à votre fichier styles.css */
+body{
+    background-color: #111a32;
+    display: flex;
+}
+body {
+    font-family: Arial, sans-serif; /* Ajustez la famille de polices selon vos besoins */
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre le contenu horizontalement */
+    justify-content: center;
+    width: 50%;
+}
+
+.global {
+    display: flex;
+    flex-direction: column; /* Aligne les éléments en colonne */
+    align-items: center; /* Centre les éléments horizontalement */
+    justify-content: center; /* Centre les éléments verticalement */
+    padding: 5px;
+    margin: 20px;
+    background-color: #f0f0f0; /* Définissez une couleur de fond pour le contenu */
+    border: 1px solid #ccc;
+    width: 45%; /* Ajustez la largeur selon vos besoins */
+    margin-left: auto; /* Centre l'élément à gauche */
+    margin-right: auto; /* Centre l'élément à droite */
+    border-radius: 20px; /* Ajoutez un rayon de bordure de 10px, ajustez selon vos préférences */
+}
+
+
+.modification {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%; /* Assurez-vous que la div de modification occupe toute la largeur */
+    padding: 10px;
+    width: 50%;
+}
+/* styles.css */
+
+/* Styles pour le formulaire de modification */
+.modification-form {
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 15px;
+    width: 20%;
+}
+
+
+.nom,
+.role {
+    margin: 1%;
+}
+
+.modification-form {
+    position: absolute;
+    top: 0; /* Ajustez la position du haut selon vos besoins */
+    left: 50%; /* Ajustez la position de gauche selon vos besoins */
+    padding: 10px;
+    background-color: #fff; /* Définissez une couleur de fond pour une meilleure visibilité */
+    border: 1px solid #ccc;
+}
+/* Ajoutez ce CSS à votre fichier styles.css */
+
+/* Style général pour les boutons */
+button {
+    padding: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+/* Style spécifique pour les boutons Modifier */
+button[name="modification"] {
+    background-color: #4caf50; /* Couleur de fond pour le bouton Modifier */
+    color: #fff; /* Couleur du texte pour le bouton Modifier */
+    cursor: pointer;
+}
+
+/* Style spécifique pour les boutons Supprimer */
+button[name="supprimer"] {
+    background-color: #ff3333; /* Couleur de fond pour le bouton Supprimer */
+    color: #fff; /* Couleur du texte pour le bouton Supprimer */
+}
+
+/* Style spécifique pour les boutons Valider */
+button[name="Valider"] {
+    background-color: #007bff; /* Couleur de fond pour les boutons Valider */
+    color: #fff; /* Couleur du texte pour les boutons Valider */
+}
+
+button[name="fermer"] {
+    background-color: #ccc;
+    color: #333;
+    border: 1px solid #333;
+    padding: 5px;
+    margin: 10px;
+    cursor: pointer;
+}
