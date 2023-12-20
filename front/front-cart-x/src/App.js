@@ -12,6 +12,14 @@ function App() {
         <div className='logo'>
           <Link to="/">Home</Link>
         </div>
+        {localStorage.getItem('userType') === 'admin' || localStorage.getItem('userType') === 'createur' ? (
+          <div className='add'>
+            <Link to="/addCard">Ajouter une carte</Link>
+          </div>
+        ) : (
+          <div></div>
+        )}
+
         {/* On check si le localstorage contient le nom d'un utilisateur */}
         {/* Si oui, on affiche un bouton pour se déconnecter (quand on clique sur le bouton, on vide alors le localStorage) */}
         {/* Sinon, on affiche un bouton pour se connecter */}
@@ -33,9 +41,6 @@ function App() {
             <Link to="/inscription">Inscription</Link>
           </div>
         )}
-        <div className='addCart'>
-          <Link to="/addCard">Ajouter Carte</Link>
-        </div>
       </nav>
 
       <Routes>

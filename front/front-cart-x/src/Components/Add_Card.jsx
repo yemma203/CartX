@@ -41,6 +41,22 @@ export default function Add_Card() {
     }
   };
 
+  // Fonction pour ajouter le lien entre l'id de la carte et l'id de l'utilisateur dans la table "user_cards"
+  const addCardToUserCards = async (userId) => {
+    try {
+      const response = await fetch("http://localhost:8000/users_cards", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: userId,})
+      });
+    } catch (error) {
+      console.error("Erreur lors de l'ajout de la carte à la table user_cards", error);
+    }
+  };
+
   const handleAddCard = async (e) => {
     e.preventDefault();
 
@@ -70,6 +86,10 @@ export default function Add_Card() {
 
           if (response.ok) {
             console.log("Carte ajoutée avec succès");
+
+            // Ajoutez le lien entre l'id de la carte et l'id de l'utilisateur dans la table "user_cards"
+            addCardToUserCards(localStorage.getItem("userId"));
+
             setCardName("");
             setErrorMessage("");
             setShowManualForm(false); // Réinitialisez le formulaire manuel
@@ -112,6 +132,10 @@ export default function Add_Card() {
       });
 
       if (response.ok) {
+
+        // Ajoutez le lien entre l'id de la carte et l'id de l'utilisateur dans la table "user_cards"
+        addCardToUserCards(localStorage.getItem("userId"));
+
         setCardName("");
         setManualCardType("");
         setManualCardRarity("");

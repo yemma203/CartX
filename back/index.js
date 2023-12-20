@@ -37,11 +37,12 @@ app.get('/cards', async (req, res) => {
         let query;
         switch (sortParam) {
             case 'rarity':
-                // Tri par rareté dans un ordre spécifique
+                // Tri par rareté dans un ordre spécifique avec jointure sur user_cards
                 query = `
-                    SELECT * FROM cards 
+                    SELECT c.*, uc.user_id FROM cards c
+                    LEFT JOIN user_cards uc ON c.card_id = uc.card_id
                     ORDER BY 
-                        CASE rarity
+                        CASE c.rarity
                             WHEN 'Common' THEN 1
                             WHEN 'Rare' THEN 2
                             WHEN 'Super Rare' THEN 3
@@ -66,19 +67,21 @@ app.get('/cards', async (req, res) => {
                 `;
                 break;
             case 'price':
-                // Tri par prix avec les prix inconnus à la fin
+                // Tri par prix avec les prix inconnus à la fin avec jointure sur user_cards
                 query = `
-                    SELECT * FROM cards 
+                    SELECT c.*, uc.user_id FROM cards c
+                    LEFT JOIN user_cards uc ON c.card_id = uc.card_id
                     ORDER BY 
                         CASE 
-                            WHEN ebay_price = 0.0 THEN 1
+                            WHEN c.ebay_price = 0.0 THEN 1
                             ELSE 0
                         END,
-                        ebay_price
+                        c.ebay_price
                 `;
                 break;
             default:
-                query = 'SELECT * FROM cards';
+                // Requête par défaut avec jointure sur user_cards
+                query = 'SELECT c.*, uc.user_id FROM cards c LEFT JOIN user_cards uc ON c.card_id = uc.card_id';
         }
 
         const rows = await conn.query(query);
@@ -93,6 +96,45 @@ app.get('/cards', async (req, res) => {
     }
 });
 
+// Methode pour récuperer l'id de la derniere carte ajoutée
+
+app.get('/cards/last', async (req, res) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const rows = await conn.query('SELECT card_id FROM cards ORDER BY card_id DESC LIMIT 1');
+        res.status(200).json(rows);
+    } catch (err) {
+        console.error("Erreur côté serveur:", err.message);
+        res.status(500).json({ error: 'Erreur côté serveur' });
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+});
+
+// Methode pour savoir si une carte est dans la collection d'un utilisateur
+
+app.get('/cards/:id/:user_id', async (req, res) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const rows = await conn.query('SELECT * FROM user_cards WHERE card_id = ? AND user_id = ?', [req.params.id, req.params.user_id]);
+        if (rows.length === 0) {
+            res.status(404).json({ message: 'Carte non trouvée' });
+        } else {
+            res.status(200).json({ message: 'Carte trouvée' });
+        }
+    } catch (err) {
+        console.error("Erreur côté serveur:", err.message);
+        res.status(500).json({ error: 'Erreur côté serveur' });
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+});
 
 
 // POST
@@ -136,11 +178,101 @@ app.post('/manualCards', async (req, res) => {
         console.log('Erreur');
         res.status(500).json({ message: 'Erreur serveur' });
     }
-    // Une fois que la carte est ajoutée, on veut aussi ajouter les liens avec les utilisateurs
-    // On va donc chercher l'id de la carte qu'on vient d'ajouter
-    // Puis on va ajouter des lignes dans la table user_cards
 });
 
+app.post('/users_cards', async (req, res) => {
+    console.log(req.body);
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        // On récupère l'id de la dernière carte ajoutée
+        const rows = await conn.query('SELECT card_id FROM cards ORDER BY card_id DESC LIMIT 1');
+        const lastCardId = rows[0].card_id;
+
+        // On récupère l'id de l'utilisateur
+        const userId = req.body.user_id;
+
+        // On ajoute la carte à la table users_cards
+        const result = await conn.query('INSERT INTO user_cards (user_id, card_id) VALUES (?, ?)', [
+            userId,
+            lastCardId
+        ]);
+        console.log(result);
+        res.status(201).json({ message: 'Carte ajoutée à la collection' });
+    } catch (err) {
+        console.error("Erreur côté serveur:", err.message);
+        res.status(500).json({ error: 'Erreur côté serveur' });
+    } finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+});
+
+// PUT
+
+app.put('/cardsWithImg/:id', async (req, res) => {
+    const card = req.body;
+    let conn;
+    try{
+        conn = await pool.getConnection();
+        // Je veux set les champs : type, rarity, ebay_price, cardmarket_price, tcgplayer_price, amazon_price
+        const result = await conn.query('UPDATE cards SET type = ?, rarity = ?, ebay_price = ?, cardmarket_price = ?, tcgplayer_price = ?, amazon_price = ? WHERE card_id = ?', [
+            card.type,
+            card.rarity,
+            card.ebay_price,
+            card.cardmarket_price,
+            card.tcgplayer_price,
+            card.amazon_price,
+            req.params.id
+        ]);
+        console.log(result);
+        res.status(201).json({ message: 'Carte modifiée' });
+    }
+    catch{
+        console.log('Erreur');
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
+app.put('/cardsWithoutImg/:id', async (req, res) => {
+    const card = req.body;
+    let conn;
+    try{
+        conn = await pool.getConnection();
+        // Je veux set les champs : name, type, rarity, global_price
+        const result = await conn.query('UPDATE cards SET name = ?, type = ?, rarity = ?, global_price = ? WHERE card_id = ?', [
+            card.card_name,
+            card.type,
+            card.rarity,
+            card.global_price,
+            req.params.id
+        ]);
+        console.log(result);
+        res.status(201).json({ message: 'Carte modifiée' });
+    }
+    catch{
+        console.log('Erreur');
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+});
+
+// DELETE
+
+app.delete('/cards/:id', async (req, res) => {
+    let conn;
+    try{
+        conn = await pool.getConnection();
+        const result = await conn.query('DELETE FROM cards WHERE card_id = ?', [req.params.id]);
+        console.log(result);
+        res.status(201).json({ message: 'Carte supprimée' });
+    }
+    catch{
+        console.log('Erreur');
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+}
+);
 
 // 
 // 

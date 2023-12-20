@@ -34,12 +34,18 @@ else{
 
 // On insere les 300 cartes dans la database
 
-function addCard($rarity, $ebay_price, $img_url, $connexion){
-    $sql = "INSERT INTO cards (img_url, rarity, ebay_price) VALUES (:img_url, :rarity, :ebay_price)";
+function addCard($img_url, $type, $rarity, $ebay_price, $cardmarket_price, $tgcplayer_price, $amazon_price, $connexion){
+    $sql = "INSERT INTO cards (img_url, type, rarity, ebay_price, cardmarket_price, tgcplayer_price, amazon_price) VALUES (
+        :img_url, :type, :rarity, :ebay_price, :cardmarket_price, :tgcplayer_price, :amazon_price
+    )";
     $stmt = $connexion->prepare($sql);
     $stmt->bindParam(':img_url', $img_url);
+    $stmt->bindParam(':type', $type);
     $stmt->bindParam(':rarity', $rarity);
     $stmt->bindParam(':ebay_price', $ebay_price);
+    $stmt->bindParam(':cardmarket_price', $cardmarket_price);
+    $stmt->bindParam(':tgcplayer_price', $tgcplayer_price);
+    $stmt->bindParam(':amazon_price', $amazon_price);
     $stmt->execute();
 
 }
@@ -51,10 +57,14 @@ for ($i=0; $i < 300; $i++) {
     else{
         $rarity = "N/A";
     }
-    $ebay_price = $first300Cards[$i]['card_prices'][0]['ebay_price'];
     $img_url = $first300Cards[$i]['card_images'][0]['image_url'];
+    $type = $first300Cards[$i]['type'];
+    $ebay_price = $first300Cards[$i]['card_prices'][0]['ebay_price'];
+    $cardmarket_price = $first300Cards[$i]['card_prices'][0]['cardmarket_price'];
+    $tgcplayer_price = $first300Cards[$i]['card_prices'][0]['tcgplayer_price'];
+    $amazon_price = $first300Cards[$i]['card_prices'][0]['amazon_price'];
 
-    addCard($rarity, $ebay_price, $img_url, $connexion);
+    addCard($img_url, $type, $rarity, $ebay_price, $cardmarket_price, $tgcplayer_price, $amazon_price, $connexion);
 }
 
 ?>

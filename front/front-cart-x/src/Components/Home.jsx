@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
+import Card_Details from "./Card_Details";
+import Card_Details_Without_Img from "./Card_Details_Without_Img";
 
 export default function Home() {
   const [cards, setCards] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(8);
   const [sortParam, setSortParam] = useState("");
-  const userType = localStorage.getItem("userType");
+  const [selectedCard, setSelectedCard] = useState(null);
 
-  console.log(localStorage)
+  const openCardDetail = (card) => {
+    setSelectedCard(card);
+  };
 
+  const closeCardDetail = () => {
+    setSelectedCard(null);
+  };
 
   const getCards = async () => {
     try {
@@ -33,30 +40,40 @@ export default function Home() {
 
   return (
     <div>
-      <div>
-        <label>Trier par :</label>
-        <select
-          value={sortParam}
-          onChange={(e) => setSortParam(e.target.value)}
-        >
-          <option value="name">Nom</option>
-          <option value="rarity">Rareté</option>
-          <option value="price">Prix</option>
-        </select>
+      <div className="top">
+        <div>
+          <label>Trier par :</label>
+          <select
+            value={sortParam}
+            onChange={(e) => setSortParam(e.target.value)}
+          >
+            <option value="name">Nom</option>
+            <option value="rarity">Rareté</option>
+            <option value="price">Prix</option>
+          </select>
+        </div>
+
+        {localStorage.getItem("userType") === "admin" && (
+          <div>
+            {/* Afficher le bouton d'administration */}
+            <button
+              onClick={() =>
+                (window.location.href =
+                  "http://localhost/CarteXlien/back/admin.php")
+              }
+            >
+              Administration
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="cards">
         {currentCards.map((card) => (
-          <div className="card" key={card.id}>
+          <div className="card" key={card.id} onClick={() => openCardDetail(card)}>
             {card.img_url ? (
               <div className="cardWithImg">
                 <img src={card.img_url} alt="img of card" />
-                {/* Si le ebay_price est de 0.00 on le remplace par Prix Inconnu */}
-                <p>
-                  Prix sur Ebay:{" "}
-                  {card.ebay_price === "0.00" ? "Inconnu" : card.ebay_price + "$"}
-                </p>
-                <p>{card.rarity}</p>
               </div>
             ) : (
               <div className="cardWithoutImg">
@@ -69,21 +86,13 @@ export default function Home() {
             )}
           </div>
         ))}
+        {selectedCard && (selectedCard.img_url != null) && (
+          <Card_Details card={selectedCard} onClose={closeCardDetail} />
+        )}
+        {selectedCard && (selectedCard.img_url == null) && (
+          <Card_Details_Without_Img card={selectedCard} onClose={closeCardDetail} />
+        )}
       </div>
-
-      {userType === "admin" && (
-        <div>
-          {/* Afficher le bouton d'administration */}
-          <button
-            onClick={() =>
-              (window.location.href =
-                "http://localhost/CarteXlien/back/admin.php")
-            }
-          >
-            Administration
-          </button>
-        </div>
-      )}
       <div className="pagination">
         <button
           onClick={() => {
