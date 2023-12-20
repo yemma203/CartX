@@ -34,8 +34,7 @@ export default function Inscription() {
               setEmail("");
               setMot_de_passe("");
               setType_utilisateur("");
-            // On ajoute l'utilisateur dans le localStorage pour le connecter
-              localStorage.setItem("username", username);
+
               window.location.href = "/home";
             } else {
               console.log("Erreur lors de l'ajout de l'utilisateur");

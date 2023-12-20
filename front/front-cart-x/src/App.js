@@ -15,10 +15,12 @@ function App() {
         {/* On check si le localstorage contient le nom d'un utilisateur */}
         {/* Si oui, on affiche un bouton pour se déconnecter (quand on clique sur le bouton, on vide alors le localStorage) */}
         {/* Sinon, on affiche un bouton pour se connecter */}
-        {localStorage.getItem('username') ? (
+        {localStorage.getItem('userName') ? (
           <button
             onClick={() => {
-              localStorage.removeItem('username');
+              localStorage.removeItem('userName');
+              localStorage.removeItem('userType');
+              localStorage.removeItem('userId')
               window.location.reload();
               // Ajoutez ici d'autres actions à effectuer lors de la déconnexion si nécessaire
             }}
