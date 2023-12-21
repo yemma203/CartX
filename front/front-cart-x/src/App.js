@@ -10,8 +10,10 @@ function App() {
     <>
       <nav>
         <div className='logo'>
-          <Link to="/">Home</Link>
-        </div>
+          <Link to="/">
+            <img src='./logoHome.png' alt="logo" />
+          </Link>
+        </div>  
         {localStorage.getItem('userType') === 'admin' || localStorage.getItem('userType') === 'createur' ? (
           <div className='add'>
             <Link to="/addCard">Ajouter une carte</Link>
@@ -24,7 +26,7 @@ function App() {
         {/* Si oui, on affiche un bouton pour se déconnecter (quand on clique sur le bouton, on vide alors le localStorage) */}
         {/* Sinon, on affiche un bouton pour se connecter */}
         {localStorage.getItem('userName') ? (
-          <button
+          <button className='logoDeco'
             onClick={() => {
               localStorage.removeItem('userName');
               localStorage.removeItem('userType');
@@ -33,12 +35,15 @@ function App() {
               // Ajoutez ici d'autres actions à effectuer lors de la déconnexion si nécessaire
             }}
           >
-            Déconnexion
           </button>
         ) : (
           <div className='log'>
-            <Link to="/login">Connexion</Link>
-            <Link to="/inscription">Inscription</Link>
+            <Link to="/login">
+              <input type="button" value="Connexion" />
+            </Link>
+            <Link to="/inscription">
+              <input type="button" value="Inscription" />
+            </Link>
           </div>
         )}
       </nav>

@@ -63,19 +63,18 @@ export default function Connexion() {
     <div className='connexionContainer'>
       <h1>Connexion</h1>
       <form onSubmit={handleLogin}>
-        <label htmlFor="username">Nom d'utilisateur</label>
         <input
           type="text"
           id="username"
           value={username}
+          placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
         />
-
-        <label htmlFor="mot_de_passe">Mot de passe</label>
         <input
           type="password"
           id="mot_de_passe"
           value={mot_de_passe}
+          placeholder='Password'
           onChange={(e) => setMot_de_passe(e.target.value)}
         />
 
