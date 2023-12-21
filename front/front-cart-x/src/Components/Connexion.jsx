@@ -61,7 +61,7 @@ export default function Connexion() {
 
   return (
     <div className='connexionContainer'>
-      <h1>Connexion</h1>
+      <h1>Log in</h1>
       <form onSubmit={handleLogin}>
         <input
           type="text"
@@ -78,7 +78,7 @@ export default function Connexion() {
           onChange={(e) => setMot_de_passe(e.target.value)}
         />
 
-        <button type="submit">Se connecter</button>
+        <button type="submit">Log in</button>
       </form>
     </div>
   );

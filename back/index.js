@@ -74,6 +74,7 @@ app.get('/cards', async (req, res) => {
                     ORDER BY 
                         CASE 
                             WHEN c.ebay_price = 0.0 THEN 1
+                            WHEN global_price IS NOT NULL THEN 2
                             ELSE 0
                         END,
                         c.ebay_price

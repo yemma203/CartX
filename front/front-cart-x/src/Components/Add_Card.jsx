@@ -152,58 +152,59 @@ export default function Add_Card() {
   };
 
   return (
-    <div>
-      <h1>Ajouter une carte</h1>
+    <div className="addCardContainer">
+      <h1>Card's name</h1>
       <form onSubmit={handleAddCard}>
-        <label htmlFor="cardName">Nom de la carte</label>
         <input
           type="text"
           id="cardName"
           value={cardName}
+          placeholder="Card's name"
           onChange={(e) => setCardName(e.target.value)}
         />
-        <button type="submit">Ajouter</button>
+        {!showManualForm && (
+          <button type="submit">Add</button>
+          )}
       </form>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       {showManualForm && (
-        <div>
-          <p>La carte n'existe pas dans l'API.</p>
-          <p>Ajoutez manuellement la carte :</p>
-          {/* Formulaire pour ajouter manuellement la carte */}
+        <div className="addCardManualContainer">
+          <div className="addCardManualText">
+          <p>This card doesn't exist</p>
+          <p>Put your own informations :</p>
+
+          </div>
           <form onSubmit={handleManualAdd}>
-            <label htmlFor="manualCardType">Type</label>
             <input
               type="text"
               id="manualCardType"
               value={manualCardType}
+              placeholder="Type"
               onChange={(e) => setManualCardType(e.target.value)}
             />
-
-            <label htmlFor="manualCardRarity">Rareté</label>
             <input
               type="text"
               id="manualCardRarity"
               value={manualCardRarity}
+              placeholder="Rarity"
               onChange={(e) => setManualCardRarity(e.target.value)}
             />
-
-            <label htmlFor="manualCardDescription">Description</label>
             <input
               type="text"
               id="manualCardDescription"
               value={manualCardDescription}
+              placeholder="Description"
               onChange={(e) => setManualCardDescription(e.target.value)}
             />
-
-            <label htmlFor="manualCardPrice">Prix général</label>
             <input
               type="text"
               id="manualCardPrice"
               value={manualCardPrice}
+              placeholder="Price"
               onChange={(e) => setManualCardPrice(e.target.value)}
             />
 
-            <button type="submit">Ajouter manuellement</button>
+            <button type="submit">Add</button>
           </form>
         </div>
       )}

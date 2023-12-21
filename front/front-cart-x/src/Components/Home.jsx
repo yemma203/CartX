@@ -39,59 +39,68 @@ export default function Home() {
     : [];
 
   return (
-    <div>
-      <div className="top">
-        <div>
-          <label>Trier par :</label>
-          <select
-            value={sortParam}
-            onChange={(e) => setSortParam(e.target.value)}
-          >
-            <option value="name">Nom</option>
-            <option value="rarity">Rareté</option>
-            <option value="price">Prix</option>
-          </select>
+    <>
+      <div className="homeContainer">
+        <div className="homeLeft">
+          <div>
+            <label>Trier par :</label>
+            <select
+              value={sortParam}
+              onChange={(e) => setSortParam(e.target.value)}
+            >
+              <option value="name">Nom</option>
+              <option value="rarity">Rareté</option>
+              <option value="price">Prix</option>
+            </select>
+          </div>
+
+          {localStorage.getItem("userType") === "admin" && (
+            <div>
+              {/* Afficher le bouton d'administration */}
+              <button
+                onClick={() =>
+                  (window.location.href =
+                    "http://localhost/CarteXlien/back/admin.php")
+                }
+              >
+                Administration
+              </button>
+            </div>
+          )}
         </div>
 
-        {localStorage.getItem("userType") === "admin" && (
-          <div>
-            {/* Afficher le bouton d'administration */}
-            <button
-              onClick={() =>
-                (window.location.href =
-                  "http://localhost/CarteXlien/back/admin.php")
-              }
+        <div className="cards">
+          {currentCards.map((card) => (
+            <div
+              className="card"
+              key={card.id}
+              onClick={() => openCardDetail(card)}
             >
-              Administration
-            </button>
-          </div>
-        )}
-      </div>
-
-      <div className="cards">
-        {currentCards.map((card) => (
-          <div className="card" key={card.id} onClick={() => openCardDetail(card)}>
-            {card.img_url ? (
-              <div className="cardWithImg">
-                <img src={card.img_url} alt="img of card" />
-              </div>
-            ) : (
-              <div className="cardWithoutImg">
-                <p>Nom: {card.name}</p>
-                <p>Rareté: {card.rarity}</p>
-                <p>Description: {card.description}</p>
-                <p>Type: {card.type}</p>
-                <p>Prix global: {card.global_price} $</p>
-              </div>
-            )}
-          </div>
-        ))}
-        {selectedCard && (selectedCard.img_url != null) && (
-          <Card_Details card={selectedCard} onClose={closeCardDetail} />
-        )}
-        {selectedCard && (selectedCard.img_url == null) && (
-          <Card_Details_Without_Img card={selectedCard} onClose={closeCardDetail} />
-        )}
+              {card.img_url ? (
+                <div className="cardWithImg">
+                  <img src={card.img_url} alt="img of card" />
+                </div>
+              ) : (
+                <div className="cardWithoutImg">
+                  <p>Nom: {card.name}</p>
+                  <p>Rareté: {card.rarity}</p>
+                  <p>Description: {card.description}</p>
+                  <p>Type: {card.type}</p>
+                  <p>Prix global: {card.global_price} $</p>
+                </div>
+              )}
+            </div>
+          ))}
+          {selectedCard && selectedCard.img_url != null && (
+            <Card_Details card={selectedCard} onClose={closeCardDetail} />
+          )}
+          {selectedCard && selectedCard.img_url == null && (
+            <Card_Details_Without_Img
+              card={selectedCard}
+              onClose={closeCardDetail}
+            />
+          )}
+        </div>
       </div>
       <div className="pagination">
         <button
@@ -113,6 +122,6 @@ export default function Home() {
           Suivant
         </button>
       </div>
-    </div>
+    </>
   );
 }

@@ -16,15 +16,13 @@ function App() {
         </div>  
         {localStorage.getItem('userType') === 'admin' || localStorage.getItem('userType') === 'createur' ? (
           <div className='add'>
-            <Link to="/addCard">Ajouter une carte</Link>
+            <Link to="/addCard">
+              <input className='addCardButton' type="button" value="Ajouter une carte" />
+            </Link>
           </div>
         ) : (
           <div></div>
         )}
-
-        {/* On check si le localstorage contient le nom d'un utilisateur */}
-        {/* Si oui, on affiche un bouton pour se déconnecter (quand on clique sur le bouton, on vide alors le localStorage) */}
-        {/* Sinon, on affiche un bouton pour se connecter */}
         {localStorage.getItem('userName') ? (
           <button className='logoDeco'
             onClick={() => {
@@ -32,7 +30,6 @@ function App() {
               localStorage.removeItem('userType');
               localStorage.removeItem('userId')
               window.location.reload();
-              // Ajoutez ici d'autres actions à effectuer lors de la déconnexion si nécessaire
             }}
           >
           </button>

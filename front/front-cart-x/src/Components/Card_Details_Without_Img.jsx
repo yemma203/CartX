@@ -7,7 +7,7 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
   const [global_price, setGlobal_price] = useState(card.global_price);
   const [isEditing, setIsEditing] = useState(false);
 
-  console.log(card.card_id)
+  console.log(card.card_id);
 
   const handleModify = async (e) => {
     e.preventDefault();
@@ -67,12 +67,11 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
     }
   };
 
-
   return (
     <div className="card-detail-overlay">
       <div className="card-detail">
         <div className="topCard">
-          <button onClick={onClose}>Fermer</button>
+          <input type="submit" value="" onClick={onClose}></input>
         </div>
         {isEditing ? (
           <form onSubmit={handleModify} className="formModify">
@@ -109,15 +108,20 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
               <p>Type : {card.type}</p>
               <p>Rarity : {card.rarity}</p>
               <p>Prix global : {card.global_price} $</p>
-              {localStorage.getItem("userType") === "admin" ||
+              {localStorage.getItem("userType") === "admin" ? (
+                <div className="cardDetailButton">
+                  <button onClick={() => setIsEditing(true)}>Modifier</button>
+                  <button onClick={handleDelete}>Supprimer</button>
+                </div>
+              ) : card.user_id &&
                 localStorage.getItem("userId") == card.user_id ? (
-                    <div>
-                        <button onClick={() => setIsEditing(true)}>Modifier</button>
-                        <button onClick={handleDelete}>Supprimer</button>    
-                    </div>
-                ) : (
-                  <div></div>
-                )}
+                <div className="cardDetailButton">
+                  <button onClick={() => setIsEditing(true)}>Modifier</button>
+                  <button onClick={handleDelete}>Supprimer</button>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
         )}
