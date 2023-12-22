@@ -5,6 +5,8 @@
 /back/composer.json
 /back/composer.lock
 /back/composer.lock.json
-/back/src/tests/Unit/composer.lock
+/back/package-lock.json
+/back/package.json
 /back/src/tests/Unit/composer.json
 /back/composer.lock.json
+/back/phpunit.xml
