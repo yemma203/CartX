@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 
 const Card_Details_Without_Img = ({ card, onClose }) => {
+  // States
   const [name, setCard_name] = useState(card.name);
   const [type, setType] = useState(card.type);
   const [rarity, setRarity] = useState(card.rarity);
   const [global_price, setGlobal_price] = useState(card.global_price);
   const [isEditing, setIsEditing] = useState(false);
 
-  console.log(card.card_id);
-
+  // Fonction pour gérer la modification d'une carte
   const handleModify = async (e) => {
     e.preventDefault();
 
+    // Création d'un objet avec les données mises à jour de la carte
     const updatedCard = {
       card_name: name,
       type: type,
@@ -20,6 +21,7 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
     };
 
     try {
+      // Envoi de la requête PUT pour mettre à jour la carte dans la base de données
       const response = await fetch(
         `http://localhost:8000/cardsWithoutImg/${card.card_id}`,
         {
@@ -43,11 +45,12 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
     }
   };
 
+  // Fonction pour gérer la suppression d'une carte
   const handleDelete = async (e) => {
-    console.log("yes");
     e.preventDefault();
 
     try {
+      // Envoi de la requête DELETE pour supprimer la carte de la base de données
       const response = await fetch(
         `http://localhost:8000/cards/${card.card_id}`,
         {
@@ -67,6 +70,7 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
     }
   };
 
+  // Rendu du composant
   return (
     <div className="card-detail-overlay">
       <div className="card-detail">
@@ -74,6 +78,7 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
           <input type="submit" value="" onClick={onClose}></input>
         </div>
         {isEditing ? (
+          // Formulaire de modification de la carte
           <form onSubmit={handleModify} className="formModify">
             <label>Nom de la carte :</label>
             <input
@@ -102,26 +107,31 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
             <input type="submit" value="Modifier" />
           </form>
         ) : (
+          // Affichage des détails de la carte sans édition
           <div className="card-block-with-img">
             <div className="rightCard">
               <p>Nom de la carte : {card.name}</p>
               <p>Type : {card.type}</p>
-              <p>Rarity : {card.rarity}</p>
+              <p>Rareté : {card.rarity}</p>
               <p>Prix global : {card.global_price} $</p>
               {localStorage.getItem("userType") === "admin" ? (
+                // Boutons pour modifier et supprimer la carte (pour les administrateurs)
                 <div className="cardDetailButton">
                   <button onClick={() => setIsEditing(true)}>Modifier</button>
                   <button onClick={handleDelete}>Supprimer</button>
                 </div>
               ) : card.user_id &&
                 localStorage.getItem("userId") == card.user_id ? (
+                // Boutons pour modifier et supprimer la carte (pour le propriétaire)
                 <div className="cardDetailButton">
                   <button onClick={() => setIsEditing(true)}>Modifier</button>
                   <button onClick={handleDelete}>Supprimer</button>
                 </div>
               ) : (
+                // Affichage vide si l'utilisateur n'est ni administrateur ni propriétaire de la carte
                 <div></div>
               )}
+              {/* Bouton pour ajouter la carte à la collection personnelle */}
               <div className="cardDetailButton">
                 <button
                   onClick={() => {

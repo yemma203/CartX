@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function Add_Card() {
+  // States
   const [cardName, setCardName] = useState("");
   const [cards, setCards] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -10,8 +11,9 @@ export default function Add_Card() {
   const [manualCardPrice, setManualCardPrice] = useState("");
   const [showManualForm, setShowManualForm] = useState(false);
 
+  // Effet secondaire pour récupérer les données des cartes depuis une API
   useEffect(() => {
-    // Utilisez une fonction asynchrone dans useEffect pour récupérer les cartes
+    // Utilisation d'une fonction asynchrone dans useEffect pour effectuer la requête
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -24,13 +26,15 @@ export default function Add_Card() {
       }
     };
 
-    fetchData(); // Appelez la fonction asynchrone
-  }, []); // Assurez-vous de mettre une dépendance vide pour exécuter useEffect une seule fois
+    fetchData(); // Appel de la fonction asynchrone
+  }, []); // Utilisation d'une dépendance vide pour exécuter useEffect une seule fois
 
+  // Fonction pour vérifier si une carte existe déjà dans la collection
   const checkCard = (cardName) => {
     return cards.filter((card) => card.name === cardName);
   };
 
+  // Fonction pour vérifier si une carte existe déjà dans la base de données locale
   const checkCardDB = async (cardImgUrl) => {
     try {
       const response = await fetch("http://localhost:8000/cards");
@@ -50,25 +54,32 @@ export default function Add_Card() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: userId,})
+          user_id: userId,
+        }),
       });
     } catch (error) {
-      console.error("Erreur lors de l'ajout de la carte à la table user_cards", error);
+      console.error(
+        "Erreur lors de l'ajout de la carte à la table user_cards",
+        error
+      );
     }
   };
 
+  // Gestionnaire d'événements pour ajouter une carte à la collection
   const handleAddCard = async (e) => {
     e.preventDefault();
 
+    // Vérifier si la carte existe dans la liste des cartes récupérées
     const cardData = checkCard(cardName);
 
     if (cardData.length > 0) {
       const cardImgUrl = cardData[0].card_images[0].image_url;
 
-      // Vérifie si la carte n'est pas déjà présente dans la base de données
+      // Vérifier si la carte n'est pas déjà présente dans la base de données locale
       const existingCardInDB = await checkCardDB(cardImgUrl);
 
       if (existingCardInDB.length === 0) {
+        // Créer une nouvelle carte avec des données spécifiques de l'API
         const newCard = {
           img_url: cardImgUrl,
           ebay_price: cardData[0].card_prices[0].ebay_price,
@@ -76,6 +87,7 @@ export default function Add_Card() {
         };
 
         try {
+          // Envoyer la nouvelle carte à la base de données
           const response = await fetch("http://localhost:8000/cards", {
             method: "POST",
             headers: {
@@ -87,12 +99,13 @@ export default function Add_Card() {
           if (response.ok) {
             console.log("Carte ajoutée avec succès");
 
-            // Ajoutez le lien entre l'id de la carte et l'id de l'utilisateur dans la table "user_cards"
+            // Ajouter le lien entre l'id de la carte et l'id de l'utilisateur dans la table "user_cards"
             addCardToUserCards(localStorage.getItem("userId"));
 
+            // Réinitialiser les états et masquer le formulaire manuel
             setCardName("");
             setErrorMessage("");
-            setShowManualForm(false); // Réinitialisez le formulaire manuel
+            setShowManualForm(false);
           } else {
             console.log("Erreur lors de l'ajout de la carte");
           }
@@ -100,19 +113,21 @@ export default function Add_Card() {
           console.error(err.message);
         }
       } else {
+        // Afficher un message d'erreur si la carte est déjà dans la base de données
         setErrorMessage("La carte est déjà présente dans la base de données");
       }
     } else {
-      // Si la carte n'existe pas dans l'API, affichez un formulaire pour ajouter la carte manuellement
-      setErrorMessage(""); // Effacez le message d'erreur précédent
-      setShowManualForm(true); // Affichez le formulaire manuel
+      // Si la carte n'existe pas dans l'API, afficher le formulaire pour ajouter manuellement la carte
+      setErrorMessage(""); // Effacer le message d'erreur précédent
+      setShowManualForm(true); // Afficher le formulaire manuel
     }
   };
 
+  // Gestionnaire d'événements pour ajouter manuellement une carte à la collection
   const handleManualAdd = async (e) => {
     e.preventDefault();
 
-    // Récupérez les données nécessaires depuis le formulaire manuel
+    // Récupérer les données du formulaire manuel
     const newManualCard = {
       name: cardName,
       type: manualCardType,
@@ -121,8 +136,8 @@ export default function Add_Card() {
       global_price: manualCardPrice,
     };
 
-    // Ajoutez la carte manuellement à la base de données
     try {
+      // Envoyer la nouvelle carte manuelle à la base de données
       const response = await fetch("http://localhost:8000/manualCards", {
         method: "POST",
         headers: {
@@ -132,17 +147,17 @@ export default function Add_Card() {
       });
 
       if (response.ok) {
-
-        // Ajoutez le lien entre l'id de la carte et l'id de l'utilisateur dans la table "user_cards"
+        // Ajouter le lien entre l'id de la carte et l'id de l'utilisateur dans la table "user_cards"
         addCardToUserCards(localStorage.getItem("userId"));
 
+        // Réinitialiser les états et masquer le formulaire manuel
         setCardName("");
         setManualCardType("");
         setManualCardRarity("");
         setManualCardDescription("");
         setManualCardPrice("");
         setErrorMessage("");
-        setShowManualForm(false); // Réinitialisez le formulaire manuel
+        setShowManualForm(false);
       } else {
         console.log("Erreur lors de l'ajout manuel de la carte");
       }
@@ -151,29 +166,30 @@ export default function Add_Card() {
     }
   };
 
+  // Rendu du composant
   return (
     <div className="addCardContainer">
-      <h1>Card's name</h1>
+      <h1>Nom de la carte</h1>
       <form onSubmit={handleAddCard}>
         <input
           type="text"
           id="cardName"
           value={cardName}
-          placeholder="Card's name"
+          placeholder="Nom de la carte"
           onChange={(e) => setCardName(e.target.value)}
         />
-        {!showManualForm && (
-          <button type="submit">Add</button>
-          )}
+        {!showManualForm && <button type="submit">Ajouter</button>}
       </form>
+
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+
       {showManualForm && (
         <div className="addCardManualContainer">
           <div className="addCardManualText">
-          <p>This card doesn't exist</p>
-          <p>Put your own informations :</p>
-
+            <p>Cette carte n'existe pas</p>
+            <p>Entrez vos propres informations :</p>
           </div>
+
           <form onSubmit={handleManualAdd}>
             <input
               type="text"
@@ -186,7 +202,7 @@ export default function Add_Card() {
               type="text"
               id="manualCardRarity"
               value={manualCardRarity}
-              placeholder="Rarity"
+              placeholder="Rareté"
               onChange={(e) => setManualCardRarity(e.target.value)}
             />
             <input
@@ -200,11 +216,10 @@ export default function Add_Card() {
               type="text"
               id="manualCardPrice"
               value={manualCardPrice}
-              placeholder="Price"
+              placeholder="Prix"
               onChange={(e) => setManualCardPrice(e.target.value)}
             />
-
-            <button type="submit">Add</button>
+            <button type="submit">Ajouter</button>
           </form>
         </div>
       )}

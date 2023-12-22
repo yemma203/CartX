@@ -14,7 +14,7 @@ function App() {
           <Link to="/">
             <img src='./logoHome.png' alt="logo" />
           </Link>
-        </div>  
+        </div>
         {localStorage.getItem('userType') === 'admin' || localStorage.getItem('userType') === 'createur' ? (
           <div className='add'>
             <Link to="/addCard">
@@ -27,6 +27,7 @@ function App() {
         {localStorage.getItem('userName') ? (
           <button className='logoDeco'
             onClick={() => {
+              // On supprime les données de l'utilisateur dans le localStorage
               localStorage.removeItem('userName');
               localStorage.removeItem('userType');
               localStorage.removeItem('userId');

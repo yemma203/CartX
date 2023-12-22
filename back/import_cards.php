@@ -35,8 +35,8 @@ else{
 // On insere les 300 cartes dans la database
 
 function addCard($img_url, $type, $rarity, $ebay_price, $cardmarket_price, $tgcplayer_price, $amazon_price, $connexion){
-    $sql = "INSERT INTO cards (img_url, type, rarity, ebay_price, cardmarket_price, tgcplayer_price, amazon_price) VALUES (
-        :img_url, :type, :rarity, :ebay_price, :cardmarket_price, :tgcplayer_price, :amazon_price
+    $sql = "INSERT INTO cards (img_url, type, rarity, ebay_price, cardmarket_price, tcgplayer_price, amazon_price) VALUES (
+        :img_url, :type, :rarity, :ebay_price, :cardmarket_price, :tcgplayer_price, :amazon_price
     )";
     $stmt = $connexion->prepare($sql);
     $stmt->bindParam(':img_url', $img_url);
@@ -44,7 +44,7 @@ function addCard($img_url, $type, $rarity, $ebay_price, $cardmarket_price, $tgcp
     $stmt->bindParam(':rarity', $rarity);
     $stmt->bindParam(':ebay_price', $ebay_price);
     $stmt->bindParam(':cardmarket_price', $cardmarket_price);
-    $stmt->bindParam(':tgcplayer_price', $tgcplayer_price);
+    $stmt->bindParam(':tcgplayer_price', $tgcplayer_price);
     $stmt->bindParam(':amazon_price', $amazon_price);
     $stmt->execute();
 
