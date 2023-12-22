@@ -4,3 +4,5 @@
 /back/src/tests/Unit/vendor
 /back/composer.json
 /back/composer.lock
+/back/composer.lock.json
+/back/phpunit.xml
