@@ -4,41 +4,45 @@ import Inscription from './Components/Inscription';
 import Connexion from './Components/Connexion';
 import Home from './Components/Home';
 import Add_Card from './Components/Add_Card';
+import Collection from './Components/Collection';
 
 function App() {
   return (
     <>
       <nav>
         <div className='logo'>
-          <Link to="/">Home</Link>
-        </div>
+          <Link to="/">
+            <img src='./logoHome.png' alt="logo" />
+          </Link>
+        </div>  
         {localStorage.getItem('userType') === 'admin' || localStorage.getItem('userType') === 'createur' ? (
           <div className='add'>
-            <Link to="/addCard">Ajouter une carte</Link>
+            <Link to="/addCard">
+              <input className='addCardButton' type="button" value="Ajouter une carte" />
+            </Link>
           </div>
         ) : (
           <div></div>
         )}
-
-        {/* On check si le localstorage contient le nom d'un utilisateur */}
-        {/* Si oui, on affiche un bouton pour se déconnecter (quand on clique sur le bouton, on vide alors le localStorage) */}
-        {/* Sinon, on affiche un bouton pour se connecter */}
         {localStorage.getItem('userName') ? (
-          <button
+          <button className='logoDeco'
             onClick={() => {
               localStorage.removeItem('userName');
               localStorage.removeItem('userType');
-              localStorage.removeItem('userId')
+              localStorage.removeItem('userId');
+              localStorage.setItem('collection', JSON.stringify([]));
               window.location.reload();
-              // Ajoutez ici d'autres actions à effectuer lors de la déconnexion si nécessaire
             }}
           >
-            Déconnexion
           </button>
         ) : (
           <div className='log'>
-            <Link to="/login">Connexion</Link>
-            <Link to="/inscription">Inscription</Link>
+            <Link to="/login">
+              <input type="button" value="Connexion" />
+            </Link>
+            <Link to="/inscription">
+              <input type="button" value="Inscription" />
+            </Link>
           </div>
         )}
       </nav>
@@ -48,6 +52,7 @@ function App() {
         <Route path="/login" element={<Connexion />} />
         <Route path="/" element={<Home />} />
         <Route path="/addCard" element={<Add_Card />} />
+        <Route path="/collection" element={<Collection />} />
       </Routes>
     </>
   );

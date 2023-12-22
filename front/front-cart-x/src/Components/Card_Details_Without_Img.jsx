@@ -7,6 +7,8 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
   const [global_price, setGlobal_price] = useState(card.global_price);
   const [isEditing, setIsEditing] = useState(false);
 
+  console.log(card.card_id);
+
   const handleModify = async (e) => {
     e.preventDefault();
 
@@ -41,11 +43,35 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
     }
   };
 
+  const handleDelete = async (e) => {
+    console.log("yes");
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/cards/${card.card_id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        console.log("Carte supprimée avec succès");
+        setIsEditing(false);
+        window.location.reload();
+      } else {
+        console.log("Erreur lors de la suppression de la carte");
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   return (
     <div className="card-detail-overlay">
       <div className="card-detail">
         <div className="topCard">
-          <button onClick={onClose}>Fermer</button>
+          <input type="submit" value="" onClick={onClose}></input>
         </div>
         {isEditing ? (
           <form onSubmit={handleModify} className="formModify">
@@ -82,7 +108,37 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
               <p>Type : {card.type}</p>
               <p>Rarity : {card.rarity}</p>
               <p>Prix global : {card.global_price} $</p>
-              <button onClick={() => setIsEditing(true)}>Modifier</button>
+              {localStorage.getItem("userType") === "admin" ? (
+                <div className="cardDetailButton">
+                  <button onClick={() => setIsEditing(true)}>Modifier</button>
+                  <button onClick={handleDelete}>Supprimer</button>
+                </div>
+              ) : card.user_id &&
+                localStorage.getItem("userId") == card.user_id ? (
+                <div className="cardDetailButton">
+                  <button onClick={() => setIsEditing(true)}>Modifier</button>
+                  <button onClick={handleDelete}>Supprimer</button>
+                </div>
+              ) : (
+                <div></div>
+              )}
+              <div className="cardDetailButton">
+                <button
+                  onClick={() => {
+                    const collection = JSON.parse(
+                      localStorage.getItem("collection")
+                    );
+                    collection.push(card);
+                    localStorage.setItem(
+                      "collection",
+                      JSON.stringify(collection)
+                    );
+                    window.location.reload();
+                  }}
+                >
+                  Ajouter à la collection
+                </button>
+              </div>
             </div>
           </div>
         )}

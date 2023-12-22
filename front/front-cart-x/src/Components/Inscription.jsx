@@ -46,45 +46,41 @@ export default function Inscription() {
       };
 
     return (
-      <div>
-        <h1>Inscription</h1>
+      <div className='connexionContainer' style={{ height: '400px' }}>
+        <h1>Sign Up</h1>
         <form onSubmit={handleAddUser}>
-          <label htmlFor="username">Nom d'utilisateur</label>
           <input
             type="text"
             id="username"
             value={username}
+            placeholder="Username"
             onChange={(e) => setUsername(e.target.value)}
           />
-
-          <label htmlFor="email">Email</label>
           <input
             type="text"
             id="email"
             value={email}
+            placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
           />
-
-          <label htmlFor="mot_de_passe">Mot de passe</label>
           <input
             type="text"
             id="mot_de_passe"
             value={mot_de_passe}
+            placeholder="Password"
             onChange={(e) => setMot_de_passe(e.target.value)}
           />
-
-          <label htmlFor="type_utilisateur">Type d'utilisateur</label>
           {/* formulaire qui permet de choisir entre joueur et createur */}
           <select
             id="type_utilisateur"
             value={type_utilisateur}
             onChange={(e) => setType_utilisateur(e.target.value)}
           >
-            <option value="joueur">Joueur</option>
-            <option value="createur">Créateur</option>
+            <option value="joueur">Player</option>
+            <option value="createur">Creator</option>
           </select>
 
-          <button type="submit">S'inscrire</button>
+          <button type="submit">Sign Up</button>
         </form>
       </div>
     );

@@ -43,6 +43,7 @@ export default function Connexion() {
             localStorage.setItem('userId', userData.user_id);
             localStorage.setItem('userName', username);
             localStorage.setItem('userType', userData.type_user);
+            localStorage.setItem('collection', JSON.stringify([]));
 
             window.location.href = '/';
           } else {
@@ -61,25 +62,24 @@ export default function Connexion() {
 
   return (
     <div className='connexionContainer'>
-      <h1>Connexion</h1>
+      <h1>Log in</h1>
       <form onSubmit={handleLogin}>
-        <label htmlFor="username">Nom d'utilisateur</label>
         <input
           type="text"
           id="username"
           value={username}
+          placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
         />
-
-        <label htmlFor="mot_de_passe">Mot de passe</label>
         <input
           type="password"
           id="mot_de_passe"
           value={mot_de_passe}
+          placeholder='Password'
           onChange={(e) => setMot_de_passe(e.target.value)}
         />
 
-        <button type="submit">Se connecter</button>
+        <button type="submit">Log in</button>
       </form>
     </div>
   );
