@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
+// Composant de détails de carte avec édition
 const Card_Details = ({ card, onClose }) => {
+  // États locaux pour les champs éditables
   const [type, setType] = useState(card.type);
   const [rarity, setRarity] = useState(card.rarity);
   const [ebay_price, setEbay_price] = useState(card.ebay_price);
@@ -11,9 +13,11 @@ const Card_Details = ({ card, onClose }) => {
   const [amazon_price, setAmazon_price] = useState(card.amazon_price);
   const [isEditing, setIsEditing] = useState(false);
 
+  // Fonction pour gérer la modification de la carte
   const handleModify = async (e) => {
     e.preventDefault();
 
+    // Création de l'objet mis à jour avec les nouvelles valeurs
     const updatedCard = {
       type: type,
       rarity: rarity,
@@ -24,6 +28,7 @@ const Card_Details = ({ card, onClose }) => {
     };
 
     try {
+      // Envoi de la requête PUT pour mettre à jour la carte
       const response = await fetch(
         `http://localhost:8000/cardsWithImg/${card.card_id}`,
         {
@@ -36,21 +41,26 @@ const Card_Details = ({ card, onClose }) => {
       );
 
       if (response.ok) {
+        // Succès de la modification
         console.log("Carte modifiée avec succès");
         setIsEditing(false);
         window.location.reload();
       } else {
+        // Erreur lors de la modification
         console.log("Erreur lors de la modification de la carte");
       }
     } catch (err) {
+      // Gestion des erreurs de la requête
       console.error(err.message);
     }
   };
 
+  // Fonction pour gérer la suppression de la carte
   const handleDelete = async (e) => {
     e.preventDefault();
 
     try {
+      // Envoi de la requête DELETE pour supprimer la carte
       const response = await fetch(
         `http://localhost:8000/cards/${card.card_id}`,
         {
@@ -59,13 +69,16 @@ const Card_Details = ({ card, onClose }) => {
       );
 
       if (response.ok) {
+        // Succès de la suppression
         console.log("Carte supprimée avec succès");
         setIsEditing(false);
         window.location.reload();
       } else {
+        // Erreur lors de la suppression
         console.log("Erreur lors de la suppression de la carte");
       }
     } catch (err) {
+      // Gestion des erreurs de la requête
       console.error(err.message);
     }
   };
