@@ -10,3 +10,4 @@
 /back/src/tests/Unit/composer.json
 /back/composer.lock.json
 /back/phpunit.xml
+/back/package-lock.json
