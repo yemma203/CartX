@@ -1,6 +1,6 @@
 <?php
 
-require_once("./config.php");
+require_once("config.php");
 
 try {
     // Database connection parameters
@@ -30,8 +30,14 @@ try {
     <link rel="stylesheet" href="admin.css"> <!-- Inclusion du fichier CSS -->
     <title>Votre titre</title>
     <script>
-        function closeForm() {
-            document.querySelector('.modification-form').style.display = 'none';
+        function openForm(button) {
+            var form = document.querySelector('.modification-form');
+            form.style.display = 'block';
+        }
+
+        function closeForm(button) {
+            var form = document.querySelector('.modification-form');
+            form.style.display = 'none';
         }
     </script>
 </head>
@@ -73,28 +79,30 @@ try {
         // Vérifie si le bouton "Modifier" est soumis
         if (isset($_POST["modification"]) && $valeur == true) {
             $selectedName = $_POST["modification"];
-            // Affiche le formulaire de modification
-            echo "<div class='modification-form-container'>";
             echo "<div class='modification-form'>";
             echo "<form method='post' action='admin.php'>";
             echo "<label for='name'>Nouveau nom :</label>";
             echo "<input type='text' name='name' id='name' required>";
             echo "<input type='hidden' name='oldName' value='" . htmlspecialchars($selectedName) . "'>";
-            echo "<input type='submit' name='ValiderNom' value='ValiderNom'>";
+            echo "<div class='button-container'>"; // Ajout d'un conteneur pour les boutons
+            echo "<button type='submit' name='ValiderNom' value='ValiderNom'>ValiderNom</button>";
+            echo "</div>"; // Fermeture du conteneur pour les boutons
             echo "</form>";
-
+            
             echo "<br>";
-
+            
             // Modification du rôle
             echo "<form method='post' action='admin.php'>";
             echo "<label for='role'>Nouveau rôle :</label>";
             echo "<input type='text' name='role' id='role' required>";
             echo "<input type='hidden' name='oldName' value='" . htmlspecialchars($selectedName) . "'>";
-            echo "<input type='submit' name='ValiderRole' value='ValiderRole'>";
-            echo "<button type='button' name='fermer' onclick='closeForm()'>Fermer</button>";
+            echo "<div class='button-container'>";
+            echo "<button type='submit' name='ValiderRole' value='ValiderRole'>ValiderRole</button>";
+            echo "</div>"; // Fermeture du conteneur pour les boutons
             echo "</form>";
-            echo "</div>";
-            echo "</div>";
+            echo "<button type='button' name='fermer' onclick='closeForm()'>Fermer</button>";
+            echo "</div>"; // Fermeture de la balise div
+                        
             $valeur = false;
         }
 

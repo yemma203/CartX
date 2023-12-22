@@ -1,40 +1,35 @@
 /* Ajoutez ce code CSS à votre fichier styles.css */
-body{
-    background-color: #111a32;
-    display: flex;
-}
 body {
-    font-family: Arial, sans-serif; /* Ajustez la famille de polices selon vos besoins */
-}
-
-.block {
+    background-color: #111a32;
+    font-family: Arial, sans-serif;
+  }
+  
+  .block {
     display: flex;
+    flex-wrap: wrap; /* Ajoutez cette ligne */
+  }
+  
+  .block > * {
+    flex-basis: calc(100% / 5); /* Ajoutez cette ligne */
+  }
+  
+  .global {
+    display: flex;
+    align-items: center;
     flex-direction: column;
-    align-items: center; /* Centre le contenu horizontalement */
-    justify-content: center;
-    width: 50%;
-}
-
-.global {
-    display: flex;
-    flex-direction: column; /* Aligne les éléments en colonne */
-    align-items: center; /* Centre les éléments horizontalement */
-    justify-content: center; /* Centre les éléments verticalement */
-    padding: 5px;
-    margin: 20px;
-    background-color: #f0f0f0; /* Définissez une couleur de fond pour le contenu */
+    justify-content: space-between;
+    margin: 2%;
+    background-color: #f0f0f0;
     border: 1px solid #ccc;
-    width: 45%; /* Ajustez la largeur selon vos besoins */
-    margin-left: auto; /* Centre l'élément à gauche */
-    margin-right: auto; /* Centre l'élément à droite */
-    border-radius: 20px; /* Ajoutez un rayon de bordure de 10px, ajustez selon vos préférences */
-}
-
+    border-radius: 20px;
+  }
+  
 
 .modification {
     display: flex;
-    flex-direction: column;
     justify-content: center;
+    flex-direction: row;
+    align-items: center;
     width: 100%; /* Assurez-vous que la div de modification occupe toute la largeur */
     padding: 10px;
     width: 50%;
@@ -42,31 +37,25 @@ body {
 /* styles.css */
 
 /* Styles pour le formulaire de modification */
-.modification-form {
-    background-color: #fff;
-    padding: 20px;
-    margin: 20px;
-    border-radius: 15px;
-    width: 20%;
-}
-
-
 .nom,
 .role {
     margin: 1%;
 }
 
 .modification-form {
-    position: absolute;
-    top: 0; /* Ajustez la position du haut selon vos besoins */
-    left: 50%; /* Ajustez la position de gauche selon vos besoins */
     padding: 10px;
+    width: 50%;
+    border-radius: 15px;
     background-color: #fff; /* Définissez une couleur de fond pour une meilleure visibilité */
     border: 1px solid #ccc;
 }
 /* Ajoutez ce CSS à votre fichier styles.css */
 
-/* Style général pour les boutons */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
 button {
     padding: 10px;
     font-size: 15px;
@@ -80,13 +69,19 @@ button {
 button[name="modification"] {
     background-color: #4caf50; /* Couleur de fond pour le bouton Modifier */
     color: #fff; /* Couleur du texte pour le bouton Modifier */
-    cursor: pointer;
 }
 
 /* Style spécifique pour les boutons Supprimer */
 button[name="supprimer"] {
-    background-color: #ff3333; /* Couleur de fond pour le bouton Supprimer */
-    color: #fff; /* Couleur du texte pour le bouton Supprimer */
+    background-color: #ff3333; 
+    color: #fff; 
+}
+
+button[name="ValiderNom"], button[name="ValiderRole"] {
+    flex-grow: 1; /* Les boutons prennent tout l'espace disponible */
+    margin: 5px; /* Ajoutez des marges autour des boutons */
+    background-color: #013c7b; /* Couleur de fond pour les boutons Valider */
+    color: #fff; /* Couleur du texte pour les boutons Valider */
 }
 
 /* Style spécifique pour les boutons Valider */

@@ -1,3 +1,6 @@
 /back/.env
 /back/node_modules
 /back/config.php
+/back/src/tests/Unit/vendor
+/back/composer.json
+/back/composer.lock
