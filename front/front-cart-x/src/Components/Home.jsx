@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Card_Details from "./Card_Details";
 import Card_Details_Without_Img from "./Card_Details_Without_Img";
+import Collection from "./Collection";
+import { Link, Routes, Route } from 'react-router-dom';
 
 export default function Home() {
   const [cards, setCards] = useState([]);
@@ -8,6 +10,8 @@ export default function Home() {
   const [cardsPerPage, setCardsPerPage] = useState(8);
   const [sortParam, setSortParam] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
+
+  console.log(localStorage)
 
   const openCardDetail = (card) => {
     setSelectedCard(card);
@@ -67,6 +71,9 @@ export default function Home() {
               </button>
             </div>
           )}
+          <Link to="/collection">
+            <input type="button" className="myDeckButton" value="My Deck"/>
+          </Link>
         </div>
 
         <div className="cards">

@@ -43,6 +43,7 @@ export default function Connexion() {
             localStorage.setItem('userId', userData.user_id);
             localStorage.setItem('userName', username);
             localStorage.setItem('userType', userData.type_user);
+            localStorage.setItem('collection', JSON.stringify([]));
 
             window.location.href = '/';
           } else {

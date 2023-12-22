@@ -122,6 +122,23 @@ const Card_Details_Without_Img = ({ card, onClose }) => {
               ) : (
                 <div></div>
               )}
+              <div className="cardDetailButton">
+                <button
+                  onClick={() => {
+                    const collection = JSON.parse(
+                      localStorage.getItem("collection")
+                    );
+                    collection.push(card);
+                    localStorage.setItem(
+                      "collection",
+                      JSON.stringify(collection)
+                    );
+                    window.location.reload();
+                  }}
+                >
+                  Ajouter à la collection
+                </button>
+              </div>
             </div>
           </div>
         )}

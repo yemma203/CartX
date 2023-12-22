@@ -173,6 +173,24 @@ const Card_Details = ({ card, onClose }) => {
               ) : (
                 <div></div>
               )}
+              {/* Bouton ajouter à la collection qui ajoute au localStorage de l'utilisateur les informations relatives aux cartes */}
+              <div className="cardDetailButton">
+                <button
+                  onClick={() => {
+                    const collection = JSON.parse(
+                      localStorage.getItem("collection")
+                    );
+                    collection.push(card);
+                    localStorage.setItem(
+                      "collection",
+                      JSON.stringify(collection)
+                    );
+                    window.location.reload();
+                  }}
+                >
+                  Ajouter à la collection
+                </button>
+              </div>
             </div>
           </div>
         )}

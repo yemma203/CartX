@@ -4,6 +4,7 @@ import Inscription from './Components/Inscription';
 import Connexion from './Components/Connexion';
 import Home from './Components/Home';
 import Add_Card from './Components/Add_Card';
+import Collection from './Components/Collection';
 
 function App() {
   return (
@@ -28,7 +29,8 @@ function App() {
             onClick={() => {
               localStorage.removeItem('userName');
               localStorage.removeItem('userType');
-              localStorage.removeItem('userId')
+              localStorage.removeItem('userId');
+              localStorage.setItem('collection', JSON.stringify([]));
               window.location.reload();
             }}
           >
@@ -50,6 +52,7 @@ function App() {
         <Route path="/login" element={<Connexion />} />
         <Route path="/" element={<Home />} />
         <Route path="/addCard" element={<Add_Card />} />
+        <Route path="/collection" element={<Collection />} />
       </Routes>
     </>
   );
